@@ -72,6 +72,8 @@ Sample Response:
   "warehouseId": "WH-001",
   "warehouseLocation": { "lat": 12.99999, "lng": 37.923273 }
 }
+
+
 2. Get the Shipping Charge for a Customer from a Warehouse
 Endpoint: GET /api/v1/shipping-charge
 Description: Calculates the shipping charge based on the warehouse and customer location.
