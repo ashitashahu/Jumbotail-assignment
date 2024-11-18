@@ -125,7 +125,7 @@ Navigate to the project directory:
 
 Install dependencies:
 
-    npm install
+    npm install express dotenv mongoose
 
 Set up the database and environment variables:
 
