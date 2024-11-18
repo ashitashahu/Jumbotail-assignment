@@ -7,8 +7,8 @@ const sellerSchema = new mongoose.Schema({
     {
       productId: { type: String, required: true },
       name: { type: String, required: true },
-      weight: { type: Number, required: true }, // in kg
-      dimensions: { type: Object, required: true }, // { length: cm, breadth: cm, height: cm }
+      weight: { type: Number, required: true }, 
+      dimensions: { type: Object, required: true }, 
     },
   ],
 });

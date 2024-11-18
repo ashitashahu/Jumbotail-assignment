@@ -3,7 +3,6 @@ const warehouseService = require("../services/warehouseService");
 const getNearestWarehouse = async (req, res) => {
   try {
     const { sellerId, productId } = req.query;
-    // Check if both sellerId and productId are provided in the query
     if (!sellerId || !productId) {
       return res
         .status(400)
@@ -12,13 +11,11 @@ const getNearestWarehouse = async (req, res) => {
         });
     }
 
-    // Fetch seller details and location
     const seller = await warehouseService.getSellerLocation(sellerId);
     if (!seller) {
       return res.status(404).json({ message: "Seller not found" });
     }
 
-    // Continue with the logic to find the nearest warehouse based on sellerId and productId
     const warehouse = await warehouseService.getNearestWarehouse(
       seller,
       productId

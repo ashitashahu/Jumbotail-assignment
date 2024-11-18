@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Define Product Schema
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -13,25 +12,24 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     weight: {
-      type: Number, // weight in kg
+      type: Number, 
       required: true,
     },
     dimensions: {
-      length: { type: Number, required: true }, // cm
-      width: { type: Number, required: true },  // cm
-      height: { type: Number, required: true }, // cm
+      length: { type: Number, required: true }, 
+      width: { type: Number, required: true },  
+      height: { type: Number, required: true }, 
     },
     sellingPrice: {
       type: Number,
-      required: true, // selling price in Rs
+      required: true,
     },
   },
   {
-    timestamps: true, // This will add createdAt and updatedAt fields
+    timestamps: true, 
   }
 );
 
-// Create the Product Model
 const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;

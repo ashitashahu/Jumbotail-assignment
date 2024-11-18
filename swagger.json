@@ -1,0 +1,247 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "E-Commerce Shipping Charge Estimator API",
+    "description": "APIs to calculate shipping charges for a B2B e-commerce marketplace.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Development Server"
+    }
+  ],
+  "paths": {
+    "/warehouse/nearest": {
+      "get": {
+        "summary": "Get the nearest warehouse for a seller",
+        "description": "Finds the nearest warehouse where the seller can drop the product.",
+        "parameters": [
+          {
+            "name": "sellerId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique ID of the seller."
+          },
+          {
+            "name": "productId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique ID of the product."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nearest warehouse found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "warehouseId": {
+                      "type": "string",
+                      "example": "WH-001"
+                    },
+                    "warehouseLocation": {
+                      "type": "object",
+                      "properties": {
+                        "lat": {
+                          "type": "number",
+                          "example": 12.99999
+                        },
+                        "long": {
+                          "type": "number",
+                          "example": 37.923273
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "sellerId and productId query parameters are required"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shipping-charge": {
+      "get": {
+        "summary": "Get the shipping charge for a customer from a warehouse",
+        "description": "Calculates shipping charges based on distance, transport mode, and delivery speed.",
+        "parameters": [
+          {
+            "name": "warehouseId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique ID of the warehouse."
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique ID of the customer."
+          },
+          {
+            "name": "deliverySpeed",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["standard", "express"]
+            },
+            "description": "Delivery speed (standard or express)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shipping charge calculated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shippingCharge": {
+                      "type": "number",
+                      "example": 150.0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "warehouseId, customerId, and deliverySpeed query parameters are required"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shipping-charge/calculate": {
+      "post": {
+        "summary": "Get the shipping charges for a seller and customer",
+        "description": "Combines nearest warehouse retrieval and shipping charge calculation.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sellerId": {
+                    "type": "string",
+                    "example": "123"
+                  },
+                  "customerId": {
+                    "type": "string",
+                    "example": "456"
+                  },
+                  "deliverySpeed": {
+                    "type": "string",
+                    "enum": ["standard", "express"],
+                    "example": "express"
+                  }
+                },
+                "required": ["sellerId", "customerId", "deliverySpeed"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shipping charges calculated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shippingCharge": {
+                      "type": "number",
+                      "example": 180.0
+                    },
+                    "nearestWarehouse": {
+                      "type": "object",
+                      "properties": {
+                        "warehouseId": {
+                          "type": "string",
+                          "example": "WH-001"
+                        },
+                        "warehouseLocation": {
+                          "type": "object",
+                          "properties": {
+                            "lat": {
+                              "type": "number",
+                              "example": 12.99999
+                            },
+                            "long": {
+                              "type": "number",
+                              "example": 37.923273
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "sellerId, customerId, and deliverySpeed are required"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

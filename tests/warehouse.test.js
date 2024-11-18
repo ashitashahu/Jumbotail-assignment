@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const Warehouse = require('../models/warehouse');
 const Product = require('../models/product');
 
-// Mock data
 const warehouseData = {
   location: { lat: 12.99999, lng: 37.923273 },
 };
@@ -17,11 +16,9 @@ const productData = {
   sellingPrice: 10,
 };
 
-// Jest setup
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-  // Add a warehouse and product for testing
   const warehouse = new Warehouse(warehouseData);
   await warehouse.save();
 
@@ -46,7 +43,6 @@ describe('GET /api/v1/warehouse/nearest', () => {
   });
 
   it('should return 404 if no warehouses are found', async () => {
-    // Delete all warehouses before this test
     await Warehouse.deleteMany({});
     
     const res = await request(app)
